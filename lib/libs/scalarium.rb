@@ -1,4 +1,4 @@
 # Support for the local scalapi repository
 
-require 'lib/scalapi'
-irb_activate 'scalarium_extensions', :local => true
+library 'lib/scalapi'
+plugin_library 'scalarium_extensions'

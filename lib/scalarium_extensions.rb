@@ -1,7 +1,6 @@
-helper = Module.new do
+module ScalariumExtensions
   module Helper
-    def self.init(extender, plugin_config)
-      @extender = extender
+    def self.init(plugin_config)
       @initializing = true
       @interactive = plugin_config[:interactive]
       notify("Get or activate/deactivate scalarium:\n   scalarium [true | false]")
@@ -31,7 +30,7 @@ helper = Module.new do
     end
 
     def self.notify(text)
-      @extender.notify(text, display_options)
+      ProtectedLoading.notify(text, display_options)
     end
 
     def self.failure(text)
@@ -40,7 +39,7 @@ helper = Module.new do
     end
 
     def self.warn(text)
-      @extender.warn(text, options)
+      ProtectedLoading.warn(text, options)
     end
 
     class NoResource
@@ -102,6 +101,11 @@ helper = Module.new do
       return matching_clouds || [] if options[:all]
 
       selectable_clouds = matching_clouds || clouds
+
+      if selectable_clouds.empty?
+        Helper.warn("No (matching) clouds")
+        return clouds
+      end
 
       format = "%#{selectable_clouds.size.to_s.length}d %s\n"
       menu = "\nChoose cloud:\n"
@@ -346,8 +350,8 @@ helper = Module.new do
   end
 
 
-  def self.init(extender, plugin_config)
-    Helper.init(extender, plugin_config)
+  def self.init(plugin_config)
+    Helper.init(plugin_config)
     default_token = UserSwitching.tokens.token_for_user(:"<default>") ||
         (UserSwitching.tokens.size == 1 && UserSwitching.tokens.users_and_tokens.first.last)
     default_token and Scalapi.configure {|config| config.token = default_token}
@@ -369,6 +373,6 @@ helper = Module.new do
   end
 
   self
-end.init(irb_extender, irb_config[:scalarium] || {})
+end.init(config[:scalarium] || {})
 
-extend helper # Yes, this is (unnamed module)::Helper as returned by (unnamed module).init
+provide_methods ScalariumExtensions::Helper

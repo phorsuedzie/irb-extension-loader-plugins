@@ -5,5 +5,4 @@
 # Skipped : If it looks like a Rails App
 
 
-irb_activate "libs/#{File.basename(Dir.pwd)}", :local => true,
-    :only_if => !irb_helper.rails_app? && File.exist?(Dir.pwd + "/lib")
+plugin_library "libs/#{File.basename(Dir.pwd)}"

@@ -1,11 +1,6 @@
-Module.new do
-  HINTS = [
+def self.init(loader)
+  hints = [
     "Forgot to store your last irb expression in a var? Don't worry - use '_':\n  keep = _",
   ]
-
-  def self.init(extender)
-    extender.notify "#{HINTS.shuffle.first}".gsub(/^/, "[Hint] ")
-  end
-
-  self
-end.init(irb_extender)
+  loader.notify "#{hints.shuffle.first}", :section => "Hint"
+end

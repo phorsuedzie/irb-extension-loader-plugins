@@ -1,1 +1,1 @@
-irb_activate 'scalarium_extensions', :local => true
+plugin_library 'scalarium_extensions'

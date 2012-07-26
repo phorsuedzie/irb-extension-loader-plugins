@@ -1,4 +1,4 @@
-irb_extender.activate 'wirble' do
+library 'wirble' do
   Wirble.init
   Wirble.colorize
 end
